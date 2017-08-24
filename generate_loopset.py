@@ -6,13 +6,19 @@ import numpy as np
 import argparse
 import random
 import h5py as hf
-import sys, pickle
+import sys, os
 from loopalgo import *
 
 L = 32
 SAVEFIG = True
 iceset = hf.File('squareice_states_5000x1024.h5', 'r')
-ices = iceset['icestates'][:10]
+ices = iceset['icestates']
+
+if not os.path.exists('loops'):
+    os.makedirs('loops')
+
+if not os.path.exists('limgs') and SAVEFIG:
+    os.makedirs('limgs')
 
 for idx1, s1 in enumerate(ices):
     for idx2, s2 in enumerate(ices):
