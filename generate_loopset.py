@@ -29,8 +29,8 @@ for idx1, s1 in enumerate(ices):
         s1 = ices[idx1]
         s2 = ices[idx2]
         trans = s1-s2
-        d1loops = trans_subset(s1, trans, L, index=idx1, dilation_times=1, save_img=SAVEFIG)
-        d2loops = trans_subset(s1, trans, L, index=idx1, dilation_times=2, save_img=SAVEFIG)
+        d1loops = trans_subset(s1, trans, L, from_idx=idx1, to_idx=idx2, dilation_times=1, save_img=SAVEFIG)
+        d2loops = trans_subset(s1, trans, L, from_idx=idx1, to_idx=idx2, dilation_times=2, save_img=SAVEFIG)
         loops = d1loops + d2loops
         print (' capture {} loops from {} to {}'.format(len(loops), idx1, idx2))
         if (len(loops) is not 0):

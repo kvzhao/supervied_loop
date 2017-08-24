@@ -21,7 +21,7 @@ def flip_along(state, loop):
 def apply_trans(state, trans):
     flip_along(state, np.nonzero(trans)[0])
 
-def trans_subset(state, tmap, L, index = 0, dilation_times=2, save_img=True):
+def trans_subset(state, tmap, L, from_idx= 0, to_idx = 1, dilation_times=2, save_img=True):
     '''
         Retrieve loops from transition map with dilation algorithm
         state: original state
@@ -70,7 +70,7 @@ def trans_subset(state, tmap, L, index = 0, dilation_times=2, save_img=True):
 
         if save_img and accept:
             plt.imshow(output, 'gray', interpolation='None')
-            plt.savefig('limgs/{}-{}.png'.format(index, i))
+            plt.savefig('limgs/{}-{}_{}.png'.format(from_idx, to_idx, i))
         
     return loops
 
