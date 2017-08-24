@@ -7,6 +7,7 @@ from scipy.ndimage.measurements import label
 from scipy.ndimage import binary_dilation
 
 import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 
 rint = np.random.randint
 
