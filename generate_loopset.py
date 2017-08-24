@@ -27,4 +27,8 @@ for idx1, s1 in enumerate(ices):
         d2loops = trans_subset(s1, trans, L, index=idx1, dilation_times=2, save_img=SAVEFIG)
         loops = d1loops + d2loops
         print (' capture {} loops from {} to {}'.format(len(loops), idx1, idx2))
-        np.save('loops/loopstate_{}'.format(idx1), loops)
+        if (len(loops) is not 0):
+            print ('Save loops information')
+            np.save('loops/loopstate_{}-{}'.format(idx1, idx2), loops)
+            loopsites = [np.nonzero(loop) for loop in loops]
+            np.save('loops/loopsites_{}-{}'.format(idx1, idx2), loopsites)
