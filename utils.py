@@ -33,12 +33,28 @@ def read_filelist(filelist, dirname='loops'):
 def get_loopsize(loops):
     return [len(np.nonzero(l)[0]) for l in loops]
 
-def combine_all_loops(loopsites, L):
-    combined_loopstate = np.zeros(L ** 2)
-    for [loop] in loopsites:
-        print (loop)
-        combined_loopstate[loop] = 1
-    return combined_loopstate
+def filter_loops(loops):
+    try:
+        print('number of total loops: {}'.format(len(loops)))
+
+        filtered_loops = []
+        marked = {}
+        for l in loops:
+            checked = True
+            for p in np.nonzero(l)[0]:
+                if marked.get(p):
+                    checked = False
+                    break
+                else:
+                    marked[p] = 1
+            if checked:
+                filtered_loops.append(l)
+                
+        print('number of remain loops: {}'.format(len(filtered_loops)))
+        return combine_loops(filtered_loops)
+    except:
+        print ('list is empty')
+        return
 
 def combine_loops(loops):
     if loops:
