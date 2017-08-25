@@ -33,10 +33,9 @@ def read_filelist(filelist, dirname='loops'):
 def get_loopsize(loops):
     return [len(np.nonzero(l)[0]) for l in loops]
 
-def filter_loops(loops):
+def combine_isolated_loops(loops):
     try:
         print('number of total loops: {}'.format(len(loops)))
-
         filtered_loops = []
         marked = {}
         for l in loops:
