@@ -20,6 +20,7 @@ if not os.path.exists('loops'):
 if not os.path.exists('limgs') and SAVEFIG:
     os.makedirs('limgs')
 
+## multiprocessing is needed
 for idx1, s1 in enumerate(ices):
     for idx2, s2 in enumerate(ices):
         if (idx2 == idx1):
