@@ -20,7 +20,7 @@ def get_filelist(source_idx, prefix='loopstate', dirname='loops'):
             trans = fname.split('_')[-1]
             from_idx, to_idx = trans.split('-')
             if (int(from_idx) == source_idx):
-                print ('read file: {}'.format(fname))
+                #print ('read file: {}'.format(fname))
                 filelist.append(f)
     return filelist
 
@@ -32,6 +32,32 @@ def read_filelist(filelist, dirname='loops'):
 
 def get_loopsize(loops):
     return [len(np.nonzero(l)[0]) for l in loops]
+
+def combine_isolated_loopsites(loopsites, indices):
+    '''
+        loopsites: list of numpy array
+        indices: specify which loopsite would be combine
+    '''
+    try:
+        print('number of total loops: {}'.format(len(indices)))
+        filtered_loops = []
+        marked = {}
+        for idx in indices:
+            l = loopsites[idx][0]
+            checked = True
+            for p in l:
+                if marked.get(p):
+                    checked = False
+                    break
+                else:
+                    marked[p] = 1
+            if checked:
+                filtered_loops.append(l)
+        print('number of remaining loops: {}'.format(len(filtered_loops)))
+        return combine_loopsites(filtered_loops)
+    except:
+        print ('list is empty')
+        return
 
 def combine_isolated_loops(loops):
     try:
@@ -49,21 +75,30 @@ def combine_isolated_loops(loops):
             if checked:
                 filtered_loops.append(l)
                 
-        print('number of remain loops: {}'.format(len(filtered_loops)))
-        return combine_loops(filtered_loops)
+        print('number of remaining loops: {}'.format(len(filtered_loops)))
+        return combine_loopstates(filtered_loops)
     except:
         print ('list is empty')
         return
 
-def combine_loops(loops):
+def combine_loopstates(loops):
     if loops:
         combined = np.zeros_like(loops[0])
         for l in loops:
             combined += l
             # should prevent combining same loop twice
             # conflict check
+        combined = combined.astype(np.int32)
         return combined
     else:
+        print ('list is empty')
+        return
+
+def combine_loopsites(loopsites):
+    try:
+        cloop = np.concatenate(loopsites)
+        return cloop
+    except:
         print ('list is empty')
         return
 
