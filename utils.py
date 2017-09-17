@@ -11,6 +11,13 @@ def get_ices():
     ices = iceset['icestates']
     return ices
 
+def get_ice_images():
+    import h5py as hf
+    iceset = hf.File('SQUAREICE_STATES_5000x32x32.h5', 'r')
+    ices = iceset['ICESTATES'][:]
+    iceset.close()
+    return ices
+
 def get_filelist(source_idx, prefix='loopstate', dirname='loops'):
     files = os.listdir(dirname)
     filelist = []
@@ -27,7 +34,7 @@ def get_filelist(source_idx, prefix='loopstate', dirname='loops'):
 def read_filelist(filelist, dirname='loops'):
     loops = []
     for f in filelist:
-        loops.extend(np.load('/'.join([dirname, f])))
+        loops.extend(np.load('/'.join([dirname, f]))[0])
     return loops
 
 def get_loopsize(loops):
