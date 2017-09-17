@@ -8,7 +8,8 @@ import sys, os
 def get_ices():
     import h5py as hf
     iceset = hf.File('squareice_states_5000x1024.h5', 'r')
-    ices = iceset['icestates']
+    ices = iceset['icestates'][:]
+    iceset.close()
     return ices
 
 def get_ice_images():
