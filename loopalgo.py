@@ -83,21 +83,42 @@ def cal_energy(state, L):
         eng += J * spin * se
     return eng / (2.0*L**2)
 
-def pseudo_metropolis(state, loop, L):
+def pseudo_metropolis(state, loop, L, prefix='loopstates'):
     accpet = False
     s = np.copy(state)
-    E0 = cal_energy(s, L)
-    apply_trans(s, loop)
+    E0 = cal_energy(state, L)
+    if prefix == 'loopstates':
+        apply_trans(s, loop)
+    elif prefix == 'loopsites':
+        flip_along(s, loop)
+    diff = state-s
+    loop_size = int(np.sum(np.abs(diff))/2)
     Et = cal_energy(s, L)
     dE = Et - E0
-    defect = np.sum(loop)
-    loop_size = np.sum(np.abs(loop))
     if (dE == 0.0):
-        print ('Accept')
+        print ('Accept with loop size: {}'.format(loop_size))
+        accpet = True
+    else:
+        print ('Reject with dE = {} and size {} loop sum up to {}'.format(dE, loop_size, defect))
+    return accpet
+
+def transit(state, loop, L, prefix='loopsites'):
+    accpet = False
+    s = np.copy(state)
+    E0 = cal_energy(state, L)
+    if prefix == 'loopstates':
+        apply_trans(s, loop)
+    elif prefix == 'loopsites':
+        flip_along(s, loop)
+    loop_size = int(np.sum(np.abs(state-s))/2)
+    Et = cal_energy(s, L)
+    dE = Et - E0
+    if (dE == 0.0):
+        #print ('Accept with loop size: {}'.format(loop_size))
         accpet = True
     #else:
-        #print ('Reject with dE = {} and size {} loop sum up to {}'.format(dE, loop_size, defect))
-    return accpet
+        #print ('Reject with dE = {} and size {} loop'.format(dE, loop_size))
+    return accpet, s
 
 def get_neighbor(site, L):
     x, y = int(site%L), int(site/L)
