@@ -8,13 +8,13 @@ Toolkits for retrieving loops from transition map.
 * generate_loops_from_ices.py: Load icestate from h5file and create loop states and sites.
 * create_markov_chain.py: Generate Type I dataset.
 
-### Type I Data 
-S0 -> S -> S ...  
-S1 -> S -> S -> S ...  
+### Type I Data (Markov chain transitions)
+S0 -> S' -> S'' ...  
+S1 -> S' -> S'' -> S''' ...  
 
 ordered sequences
 
-### Type II Data
+### Type II Data (Transition horizon)
 S0 -> S0'  
 S0 -> S0''   
 S0 -> S0'''  
