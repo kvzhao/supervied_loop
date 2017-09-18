@@ -73,10 +73,24 @@ class DataReader(object):
             images_new_part = self.images[start:end]
             sequences_new_part = self.sequences[start:end]
             masks_new_part = self.masks[start:end]
+
+            # Return input & target sequences (an expansive method)
+            sequences = np.concatenate((sequences_rest_part, sequences_new_part), axis=0)
+            input_sequences =[]
+            target_sequences =[]
+            for seq in sequences:
+                input_sequences.append([s for s in seq[:-1]])
+                target_sequences.append([s for s in seq[1:]])
+
             return np.concatenate((images_rest_part, images_new_part), axis=0), \
-                np.concatenate((sequences_rest_part, sequences_new_part), axis=0), \
+                input_sequences, target_sequences, \
                 np.concatenate((masks_rest_part, masks_new_part), axis=0)
         else:
             self._index_in_epoch += batch_size
             end = self._index_in_epoch
-            return self.images[start:end], self.sequences[start:end], self.masks[start:end]
+            input_sequences =[]
+            target_sequences =[]
+            for seq in self.sequences[start:end]:
+                input_sequences.append([s for s in seq[:-1]])
+                target_sequences.append([s for s in seq[1:]])
+            return self.images[start:end], input_sequences, target_sequences, self.masks[start:end]
