@@ -5,17 +5,26 @@ from __future__ import print_function
 import numpy as np
 import h5py as hf
 import sys, os
+import argparse
 
 from utils import *
 from loopalgo import *
 
 ### GLOBAL VARS
 L = 32
-# number of states from init
-num_init_states = 1
-MAX_LOOP_LENGTH = 12
-OUTPUT_NAME = 'MarkovSet.h5'
 
+parser = argparse.ArgumentParser(description='Create Markov Chain transition dataset (Type I)')
+parser.add_argument('--num_states', dest='num_init_states', default=10, type=int, help='Number of starting states')
+parser.add_argument('--max_loopsize', dest='MAX_LOOP_LENGTH', default=12, type=int, help='Assign maximum loop size')
+parser.add_argument('--out', dest='OUTPUT_NAME', default='MarkovSet.h5', type=str, help='Name of output dataset')
+FLAGS = parser.parse_args()
+
+# number of states from init
+num_init_states = FLAGS.num_init_states
+MAX_LOOP_LENGTH = FLAGS.MAX_LOOP_LENGTH
+OUTPUT_NAME = FLAGS.OUTPUT_NAME
+
+print ('Create {} initial states with maximum loop size is {}'.format(num_init_states, MAX_LOOP_LENGTH))
 
 ices = get_ices()[:num_init_states]
 output = hf.File(OUTPUT_NAME, 'w')
@@ -69,15 +78,3 @@ for idx in range(num_init_states):
 
 output.close()
 print ('Done. Save dataset to {}'.format(OUTPUT_NAME))
-
-'''
-import matplotlib.pyplot as plt
-plt.imshow(output['ice_1'][0].reshape(32,32), interpolation='none', cmap='viridis')
-plt.savefig('ice1.png')
-plt.show()
-#plt.savefig('cloop.png')
-plt.imshow(output['ice_1'][1].reshape(32,32), interpolation='none', cmap='viridis')
-plt.savefig('ice2.png')
-plt.show()
-output.close()
-'''
